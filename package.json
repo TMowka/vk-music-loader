@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/TMowka/vk-music-loader/issues"
   },
-  "homepage": "https://github.com/TMowka/vk-music-loader#readme"
+  "homepage": "https://github.com/TMowka/vk-music-loader#readme",
+  "devDependencies": {
+    "eslint": "^5.9.0"
+  },
+  "dependencies": {
+    "electron": "^3.0.10",
+    "node-fetch": "^2.3.0"
+  }
 }

@@ -1,13 +1,13 @@
 /* eslint-disable */
 
 const disableEl = document.createElement('div');
-disableEl.innerText = 'Please wait';
+disableEl.innerText = 'Getting audio list';
 setInterval(() => {
-  if (disableEl.innerText.length > 13)
-    disableEl.innerText = 'Please wait';
+  if (disableEl.innerText.length > 20)
+    disableEl.innerText = 'Getting audio list';
   else
     disableEl.innerText += '.';
-}, 500);
+}, 600);
 Object.assign(disableEl.style, {
   backgroundColor: 'rgba(0, 0, 0, 0.8)',
   zIndex: 999,

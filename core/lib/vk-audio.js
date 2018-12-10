@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const vkAudioCore = require('./vk-audio-core');
+const vkAudioDecode = require('./vk-audio-decode');
 
 class VkAudio {
   constructor(userId) {
@@ -9,7 +9,7 @@ class VkAudio {
     this.parseAudioData = this.parseAudioData.bind(this);
   }
 
-  * getAudioList(cookies, count) {
+  * getAudioList(cookieHeader, count) {
     for (let i = 0; i < Math.ceil(count / 100); i++) {
       yield fetch('https://m.vk.com/audios' + this.userId, {
         credentials: 'include',
@@ -18,7 +18,7 @@ class VkAudio {
           'accept-language': 'en-US,en;q=0.9',
           'content-type': 'application/x-www-form-urlencoded',
           'x-requested-with': 'XMLHttpRequest',
-          cookie: cookies.map(c => c.name + '=' + c.value).join('; ')
+          cookie: cookieHeader
         },
         body: '_ajax=1&offset=' + i * 100,
         method: 'POST',
@@ -31,7 +31,7 @@ class VkAudio {
 
   parseAudioData(data) {
     return {
-      url: vkAudioCore(this.userId)(data[2]),
+      url: vkAudioDecode(this.userId)(data[2]),
       artist: data[3],
       name: data[4],
       duration: data[5]

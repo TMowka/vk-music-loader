@@ -1,6 +1,6 @@
 const { app } = require('electron');
 
-const MainWindow = require('./electron-app/windows/Main');
+const MainWindow = require('./windows/Main');
 
 app.on('ready', MainWindow.createWindow);
 

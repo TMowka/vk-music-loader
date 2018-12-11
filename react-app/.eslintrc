@@ -1,0 +1,83 @@
+{
+  "env": {
+      "browser": true,
+      "amd": true,
+      "node": true,
+      "es6": true,
+      "mocha": true
+  },
+  "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+      "ecmaFeatures": {
+          "experimentalObjectRestSpread": true,
+          "jsx": true
+      }
+  },
+  "plugins": [
+      "react"
+  ],
+  "rules": {
+      "no-extra-semi": 1,
+      "no-inner-declarations": 2,
+      "no-eval": 2,
+      "no-extend-native": 2,
+      "no-new-wrappers": 2,
+      "no-with": 2,
+      "no-undef": 2,
+      "no-array-constructor": 2,
+      "no-mixed-spaces-and-tabs": 2,
+      "no-new-object": 2,
+      "no-trailing-spaces": 2, 
+      "no-console": "off",
+      "no-unused-vars": 2,
+      "rest-spread-spacing": 2,
+      "space-before-function-paren": [
+          2,
+          {
+              "anonymous": "always",
+              "named": "never",
+              "asyncArrow": "always"
+          }
+      ],
+      "array-bracket-spacing": [
+          2,
+          "never"
+      ],
+      "object-curly-spacing": [
+          2,
+          "always"
+      ],
+      "indent": [
+          2,
+          2,
+          {
+              "SwitchCase": 1
+          }
+      ],
+      "linebreak-style": [
+          2,
+          "unix"
+      ],
+      "quotes": [
+          2,
+          "single"
+      ],
+      "semi": [
+          2,
+          "always"
+      ],
+      "max-len": [
+          1,
+          100,
+          2
+      ],
+      "react/forbid-prop-types": "error",
+      "react/forbid-foreign-prop-types": "error",
+      "react/no-direct-mutation-state": "error",
+      "react/prefer-stateless-function": "error"
+  }
+}

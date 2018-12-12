@@ -5,7 +5,7 @@ import {
 import propTypes from '../../../utils/propTypes';
 import PropTypes from 'prop-types';
 
-const tHead = React.memo((props) => {
+const tHead = React.memo(props => {
   return (
     <TableHead>
       <TableRow>

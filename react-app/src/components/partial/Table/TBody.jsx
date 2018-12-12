@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { TableBody, TableRow, TableCell, Checkbox } from '@material-ui/core';
 import propTypes from '../../../utils/propTypes';
 
-const tBody = React.memo((props) => {
+const tBody = React.memo(props => {
   const count = props.page * props.rowsPerPage;
 
   return (

@@ -13,11 +13,11 @@ const rows = [
   { id: 'progress', numeric: false, disablePadding: false, label: 'Progress' }
 ];
 
-const audioTable = React.memo((props) => (
+const audioTable = React.memo(props => (
   <Table
     rows={rows}
     data={props.data}
-    onSelectAll={(event) => props.audioToggleSelectAll(event.target.checked)}
+    onSelectAll={event => props.audioToggleSelectAll(event.target.checked)}
     onRowClick={(event, id) => props.audioToggleSelect(id)}
   />
 ));

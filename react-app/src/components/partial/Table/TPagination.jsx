@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TablePagination } from '@material-ui/core';
 
-const tPagination = React.memo((props) => (
+const tPagination = React.memo(props => (
   <TablePagination
     rowsPerPageOptions={[5, 10]}
     component="div"

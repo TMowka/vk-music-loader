@@ -1,14 +1,9 @@
 import actionTypes from '../types';
 
 const initialState = {
-  list: [
-    { id: '1', selected: false, duration: 190, artist: 'Linkin Park', name: 'Numb', progress: 10 },
-    { id: '2', selected: false, duration: 120, artist: 'Evanescence', name: 'Live', progress: 10 },
-    { id: '3', selected: false, duration: 134, artist: 'Evanescence', name: 'Live', progress: 10 },
-    { id: '4', selected: false, duration: 120, artist: 'Evanescence', name: 'Live', progress: 10 },
-    { id: '5', selected: false, duration: 123, artist: 'Evanescence', name: 'Live', progress: 10 },
-    { id: '6', selected: false, duration: 1200, artist: 'Evanescence', name: 'Live', progress: 10 }
-  ]
+  list: [],
+  error: null,
+  pending: false
 };
 
 const audioReducer = (state = initialState, action) => {
@@ -31,6 +26,28 @@ const audioReducer = (state = initialState, action) => {
       return {
         ...state,
         list
+      };
+    }
+
+    case actionTypes.audio.AUDIO_UPLOAD_LIST_PENDING: {
+      return {
+        ...state,
+        pending: true
+      };
+    }
+
+    case actionTypes.audio.AUDIO_UPLOAD_LIST_SUCCESS: {
+      return {
+        ...state,
+        list: action.payload,
+        pending: false
+      };
+    }
+
+    case actionTypes.FAILURE: {
+      return {
+        ...state,
+        error: action.payload
       };
     }
 

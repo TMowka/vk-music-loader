@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "./",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "set ELECTRON_LOAD_URL=http://localhost:3000 && electron ."
   },
   "keywords": [],
   "author": "",

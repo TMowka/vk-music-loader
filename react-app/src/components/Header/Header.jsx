@@ -1,13 +1,21 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
-import { Settings } from '@material-ui/icons';
+import { AppBar, Toolbar, Typography, IconButton, Button } from '@material-ui/core';
+import { Settings, CloudUpload } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
+import audioActions from '../../store/actions/audio';
+import { connect } from 'react-redux';
+
+import Dialog from '../partial/Dialog/Dialog';
 
 class Header extends PureComponent {
   state = {
 
+  }
+
+  uploadAudioList = (event) => {
+    this.props.audioSendListPath(event.target.value);
   }
 
   render() {
@@ -22,6 +30,27 @@ class Header extends PureComponent {
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
+              <Dialog
+                trigger={
+                  <IconButton color="inherit">
+                    <CloudUpload />
+                  </IconButton>
+                }
+                title="Upload audio list"
+              >
+                <input
+                  accept=".json"
+                  className={classes.uploadInput}
+                  id="contained-button-file"
+                  type="file"
+                  onChange={this.uploadAudioList}
+                />
+                <label htmlFor="contained-button-file">
+                  <Button color="secondary" component="span" className={classes.uploadButton}>
+                    Select file
+                  </Button>
+                </label>
+              </Dialog>
               <IconButton color="inherit">
                 <Settings />
               </IconButton>
@@ -34,7 +63,12 @@ class Header extends PureComponent {
 }
 
 Header.propTypes = {
-  classes: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  audioSendListPath: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(Header);
+const mapDispatchToProps = dispatch => ({
+  audioSendListPath: path => dispatch(audioActions.audioSendListPath(path))
+});
+
+export default connect(null, mapDispatchToProps)(withStyles(styles)(Header));

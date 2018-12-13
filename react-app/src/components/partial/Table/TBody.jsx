@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TableBody, TableRow, TableCell, Checkbox } from '@material-ui/core';
+import { TableBody, TableRow, TableCell, IconButton } from '@material-ui/core';
 import propTypes from '../../../utils/propTypes';
 
 const tBody = React.memo(props => {
@@ -10,28 +10,28 @@ const tBody = React.memo(props => {
     <TableBody>
       {props.data
         .slice(count, count + props.rowsPerPage)
-        .map(r => {
-          const minutes = Math.floor(r.duration / 60);
-          const seconds = r.duration - minutes * 60;
+        .map(el => {
+          const minutes = Math.floor(el.duration / 60);
+          const seconds = el.duration - minutes * 60;
 
           return (<TableRow
             hover
-            onClick={event => props.onRowClick(event, r.id)}
-            role="checkbox"
-            aria-checked={r.selected}
-            tabIndex={-1}
-            key={r.id}
-            selected={r.selected}
+            onClick={event => props.onRowClick && props.onRowClick(event, el.key)}
+            key={el.key}
           >
-            <TableCell padding="checkbox">
-              <Checkbox checked={r.selected} />
-            </TableCell>
+            <TableCell>{el.artist}</TableCell>
+            <TableCell>{el.name}</TableCell>
             <TableCell>
               {`${minutes}:${seconds >= 0 && seconds < 10 ? '0' + seconds : seconds}`}
             </TableCell>
-            <TableCell>{r.artist}</TableCell>
-            <TableCell>{r.name}</TableCell>
-            <TableCell>{r.progress}</TableCell>
+            <TableCell>{el.progress}</TableCell>
+            <TableCell>
+              {props.actions.map((act, index) => (
+                <IconButton key={index} color="inherit" onClick={(e) => act.handler(e, el.key)}>
+                  {act.icon}
+                </IconButton>
+              ))}
+            </TableCell>
           </TableRow>
           );
         })}
@@ -46,7 +46,7 @@ const tBody = React.memo(props => {
 
 tBody.propTypes = {
   data: propTypes.AudioTable.data,
-  onRowClick: PropTypes.func.isRequired,
+  onRowClick: PropTypes.func,
   emptyRows: PropTypes.number,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired

@@ -1,60 +1,33 @@
 import actionTypes from '../types';
+import electronActionTypes from '../../electronActionTypes';
+
 const { ipcRenderer } = window.require('electron');
 
-const _audioToggleSelect = id => ({
-  type: actionTypes.audio.AUDIO_TOGGLE_SELECT,
-  payload: id
-});
-const _audioToggleSelectAll = state => ({
-  type: actionTypes.audio.AUDIO_TOGGLE_SELECT_ALL,
-  payload: state
-});
-const _audioUploadListPending = () => ({
-  type: actionTypes.audio.AUDIO_UPLOAD_LIST_PENDING
-});
-const _audioUploadListSuccess = audioList => ({
-  type: actionTypes.audio.AUDIO_UPLOAD_LIST_SUCCESS,
+const _audioUploadList = audioList => ({
+  type: actionTypes.audio.UPLOAD_LIST,
   payload: audioList
 });
-const _failure = error => ({ type: actionTypes.FAILURE, payload: error });
+const _failure = error => ({ type: actionTypes.audio.FAILURE, payload: error });
 
-const audioToggleSelect = id => dispatch => {
+const fireAudioUploadList = () => dispatch => {
   try {
-    dispatch(_audioToggleSelect(id));
+    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_UPLOAD_LIST);
   } catch (error) {
+    console.warn('[actions.audio] fireAudioUploadList');
     dispatch(_failure(error));
   }
 };
 
-const audioToggleSelectAll = state => dispatch => {
+const onAudioUploadList = audioList => dispatch => {
   try {
-    dispatch(_audioToggleSelectAll(state));
+    dispatch(_audioUploadList(audioList));
   } catch (error) {
-    dispatch(_failure(error));
-  }
-};
-
-const audioSendListPath = path => dispatch => {
-  try {
-    dispatch(_audioUploadListPending());
-    ipcRenderer.send('r-to-e-audio-upload-list', path);
-  } catch (error) {
-    dispatch(_failure(error));
-  }
-};
-
-const audioUploadList = (event, data) => dispatch => {
-  try {
-    console.log(data);
-    dispatch(_audioUploadListSuccess(data));
-  } catch (error) {
+    console.warn('[actions.audio] onAudioUploadList');
     dispatch(_failure(error));
   }
 };
 
 export default {
-  audioToggleSelect,
-  audioToggleSelectAll,
-  audioSendListPath,
-  audioUploadList
+  fireAudioUploadList,
+  onAudioUploadList
 };

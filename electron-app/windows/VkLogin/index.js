@@ -2,7 +2,6 @@ const { BrowserWindow, ipcMain } = require('electron');
 const core = require('../../../core');
 const fs = require('fs');
 const path = require('path');
-const config = require('config');
 const JSONStream = require('JSONStream');
 
 let window;
@@ -32,6 +31,10 @@ const createWindow = parent => {
     }
   });
 
+  window.on('close', () => {
+    window.webContents.session.clearStorageData();
+  });
+
   window.on('closed', () => {
     window = null;
   });
@@ -45,7 +48,7 @@ ipcMain.on('audio-count-event', async (event, audioCount) => {
     const cookieHeader = cookies.map(c => c.name + '=' + c.value).join('; ');
     const getAudioListGen = core.getAudioListGen(userId, cookieHeader, audioCount);
 
-    const file = fs.createWriteStream(config.audioListPath);
+    const file = fs.createWriteStream('C:\\Users\\tgolovchak\\Documnts\\Git\\GitHub\\vk-music-loader\\electron-app\\data\\audio.json');
     const jsonWriter = JSONStream.stringify();
     jsonWriter.pipe(file);
     for (let audioBatch of getAudioListGen)

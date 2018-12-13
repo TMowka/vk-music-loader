@@ -39,7 +39,6 @@ class T extends PureComponent {
           <Table className={classes.table} aria-labelledby="tableTitle">
             <THead
               rows={this.props.rows}
-              onSelectAll={this.props.onSelectAll}
             />
             <TBody
               data={this.props.data}
@@ -47,6 +46,7 @@ class T extends PureComponent {
               page={page}
               rowsPerPage={rowsPerPage}
               emptyRows={emptyRows}
+              actions={this.props.actions}
             />
           </Table>
         </div>
@@ -67,7 +67,10 @@ T.propTypes = {
   data: propTypes.AudioTable.data,
   rows: propTypes.AudioTable.rows,
   onRowClick: PropTypes.func,
-  onSelectAll: PropTypes.func
+  actions: PropTypes.arrayOf(PropTypes.shape({
+    icon: PropTypes.node,
+    handler: PropTypes.func
+  }))
 };
 
 export default withStyles(styles)(T);

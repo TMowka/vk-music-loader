@@ -5,6 +5,12 @@ const getAudioListGen = (userId, cookieHeader, count) => {
   return vkAudio.getAudioList(cookieHeader, count);
 };
 
+const downloadAudio = async (url, path) => {
+  const vkAudio = new VkAudio();
+  return vkAudio.downloadAudio(url, path);
+};
+
 module.exports = {
-  getAudioListGen
+  getAudioListGen,
+  downloadAudio
 };

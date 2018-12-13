@@ -29,7 +29,7 @@ const theme = createMuiTheme({
   }
 });
 
-const store = createStore(rootReducer, undefined, applyMiddleware(thunk));
+export const store = createStore(rootReducer, undefined, applyMiddleware(thunk));
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme} >

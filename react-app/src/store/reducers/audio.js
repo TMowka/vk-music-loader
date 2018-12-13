@@ -1,50 +1,28 @@
 import actionTypes from '../types';
 
 const initialState = {
-  list: [],
-  error: null,
-  pending: false
+  list: [
+    { key: '1', artist: 'test', name: 'test', duration: 10, progress: 0 }
+  ],
+  error: null
 };
 
 const audioReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.audio.AUDIO_TOGGLE_SELECT: {
-      const list = [...state.list];
-      const index = list.findIndex(el => el.id === action.payload);
-      list[index].selected = !list[index].selected;
+    case actionTypes.audio.UPLOAD_LIST: {
+      action.payload.forEach(el => {
+        el.progress = 0;
+
+        return el;
+      });
 
       return {
         ...state,
-        list
+        list: action.payload
       };
     }
 
-    case actionTypes.audio.AUDIO_TOGGLE_SELECT_ALL: {
-      const list = [...state.list];
-      list.forEach(el => el.selected = action.payload);
-
-      return {
-        ...state,
-        list
-      };
-    }
-
-    case actionTypes.audio.AUDIO_UPLOAD_LIST_PENDING: {
-      return {
-        ...state,
-        pending: true
-      };
-    }
-
-    case actionTypes.audio.AUDIO_UPLOAD_LIST_SUCCESS: {
-      return {
-        ...state,
-        list: action.payload,
-        pending: false
-      };
-    }
-
-    case actionTypes.FAILURE: {
+    case actionTypes.audio.FAILURE: {
       return {
         ...state,
         error: action.payload

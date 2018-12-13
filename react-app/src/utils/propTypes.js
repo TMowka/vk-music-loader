@@ -4,16 +4,14 @@ export default {
   AudioTable: {
     rows: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string.isRequired,
-      numeric: PropTypes.bool,
       disablePadding: PropTypes.bool,
       label: PropTypes.string
     })),
     data: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      selected: PropTypes.bool,
-      duration: PropTypes.number,
+      key: PropTypes.string.isRequired,
       artist: PropTypes.string,
       name: PropTypes.string,
+      duration: PropTypes.number,
       progress: PropTypes.number
     }))
   }

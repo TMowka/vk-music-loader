@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const vkAudioDecode = require('./vk-audio-decode');
+const fs = require('fs');
 
 class VkAudio {
   constructor(userId) {
@@ -27,6 +28,16 @@ class VkAudio {
         .then(res => res.json())
         .then(res => Object.values(res[3][0]).map(data => this.parseAudioData(data)));
     }
+  }
+
+  downloadAudio(url, path) {
+    return fetch(url, {
+      method: 'GET'
+    })
+      .then(res => {
+        const dest = fs.createWriteStream(path);
+        res.body.pipe(dest);
+      });
   }
 
   parseAudioData(data) {

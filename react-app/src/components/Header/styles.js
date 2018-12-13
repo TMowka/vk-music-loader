@@ -5,18 +5,6 @@ export default theme => ({
   grow: {
     flexGrow: 1
   },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block'
-    }
-  },
-  uploadInput: {
-    display: 'none'
-  },
-  uploadButton: {
-    margin: theme.spacing.unit
-  },
   sectionDesktop: {
     display: 'none',
     [theme.breakpoints.up('md')]: {

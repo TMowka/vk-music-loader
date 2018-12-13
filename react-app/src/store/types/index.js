@@ -1,9 +1,9 @@
 import audioActionTypes from './audio';
+import settingsActionTypes from './settings';
 
 const actionTypes = {
   audio: audioActionTypes,
-
-  FAILURE: 'FAILURE'
+  settings: settingsActionTypes
 };
 
 export default actionTypes;

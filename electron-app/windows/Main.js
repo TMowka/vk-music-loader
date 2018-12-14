@@ -3,6 +3,7 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const Settings = require('../settings');
+require('dotenv').config();
 
 const VkLoginWindow = require('./VkLogin');
 
@@ -20,11 +21,13 @@ const createWindow = () => {
     width: 800,
     height: 600
   });
-  const loadURL = process.env.ELECTRON_LOAD_URL || url.format({
-    pathname: path.join(__dirname, '/../build/index.html'),
-    protocol: 'file:',
-    slashes: true
-  });
+  const loadURL = process.env.ENV === 'development'
+    ? 'http://localhost:3000'
+    : url.format({
+      pathname: path.join(__dirname, '/../build/index.html'),
+      protocol: 'file:',
+      slashes: true
+    });
   window.setMenu(null);
   window.loadURL(loadURL);
 

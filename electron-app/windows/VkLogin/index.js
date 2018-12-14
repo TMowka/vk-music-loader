@@ -51,7 +51,7 @@ ipcMain.on('audio-count-event', async (event, audioCount) => {
     const vkAudio = new VkAudio(userId);
 
     let audioList = [];
-    const getAudioListGen = vkAudio.getAudioList(cookieHeader, audioCount);
+    const getAudioListGen = vkAudio.getList(cookieHeader, audioCount);
     for (let audioBatch of getAudioListGen)
       audioList = audioList.concat(await audioBatch);
 

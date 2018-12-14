@@ -1,9 +1,10 @@
-const { BrowserWindow, ipcMain, dialog } = require('electron');
+require('dotenv').config();
+const { BrowserWindow, ipcMain, dialog, app } = require('electron');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
 const Settings = require('../settings');
-require('dotenv').config();
+const VkAudio = require('../lib/vk-audio');
 
 const VkLoginWindow = require('./VkLogin');
 
@@ -18,8 +19,8 @@ const settings = new Settings({
 let window;
 const createWindow = () => {
   window = new BrowserWindow({
-    width: 800,
-    height: 600
+    width: 1051,
+    height: 502
   });
   const loadURL = process.env.ENV === 'development'
     ? 'http://localhost:3000'
@@ -59,11 +60,11 @@ ipcMain.on('RtoE-audio-synchronization', () => {
 });
 
 ipcMain.on('RtoE-audio-import', async () => {
-  const paths = dialog.showOpenDialog({ properties: ['openFile'] });
-  if (!paths || paths.length !== 1)
+  const openPaths = dialog.showOpenDialog({ properties: ['openFile'] });
+  if (!openPaths || openPaths.length !== 1)
     return;
 
-  const audioListStr = await fs.promises.readFile(paths[0], 'utf8');
+  const audioListStr = await fs.promises.readFile(openPaths[0], 'utf8');
   const audioList = JSON.parse(audioListStr);
 
   store.setAudioList(audioList);
@@ -71,11 +72,24 @@ ipcMain.on('RtoE-audio-import', async () => {
 });
 
 ipcMain.on('RtoE-audio-export', async () => {
-  const path = dialog.showSaveDialog();
-  if (!path)
+  const savePath = dialog.showSaveDialog();
+  if (!savePath)
     return;
 
-  await fs.promises.writeFile(path, JSON.stringify(store.getAudioList()));
+  await fs.promises.writeFile(savePath, JSON.stringify(store.getAudioList()));
+});
+
+ipcMain.on('RtoE-audio-download', async (event, key) => {
+  const audio = store.audioList.find(audio => audio.key === key);
+  const savePath = dialog.showSaveDialog({
+    defaultPath: path.join(app.getPath('downloads'), `${audio.artist} - ${audio.name}.mp3`)
+  });
+  if (!savePath)
+    return;
+
+  const vkAudio = new VkAudio();
+
+  await vkAudio.download(audio.url, savePath);
 });
 
 module.exports = {

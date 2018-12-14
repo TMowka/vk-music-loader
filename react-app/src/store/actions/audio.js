@@ -51,10 +51,20 @@ const fireSynchronization = () => dispatch => {
   }
 };
 
+const fireDownload = key => dispatch => {
+  try {
+    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_DOWNLOAD, key);
+  } catch (error) {
+    console.warn('[actions.audio] fireDownload');
+    dispatch(_failure(error));
+  }
+};
+
 export default {
   fireExport,
   fireImport,
   fireGet,
   onGet,
-  fireSynchronization
+  fireSynchronization,
+  fireDownload
 };

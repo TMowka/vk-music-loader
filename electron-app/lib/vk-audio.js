@@ -6,11 +6,11 @@ class VkAudio {
   constructor(userId) {
     this.userId = userId;
 
-    this.getAudioList = this.getAudioList.bind(this);
-    this.parseAudioData = this.parseAudioData.bind(this);
+    this.getList = this.getList.bind(this);
+    this.parse = this.parse.bind(this);
   }
 
-  * getAudioList(cookieHeader, count) {
+  * getList(cookieHeader, count) {
     for (let i = 0; i < Math.ceil(count / 100); i++) {
       yield fetch('https://m.vk.com/audios' + this.userId, {
         credentials: 'include',
@@ -26,11 +26,11 @@ class VkAudio {
         mode: 'cors'
       })
         .then(res => res.json())
-        .then(res => Object.values(res[3][0]).map(data => this.parseAudioData(data)));
+        .then(res => Object.values(res[3][0]).map(data => this.parse(data)));
     }
   }
 
-  downloadAudio(url, path) {
+  download(url, path) {
     return fetch(url, {
       method: 'GET'
     })
@@ -40,7 +40,7 @@ class VkAudio {
       });
   }
 
-  parseAudioData(data) {
+  parse(data) {
     return {
       url: vkAudioDecode(this.userId)(data[2]),
       artist: data[3],

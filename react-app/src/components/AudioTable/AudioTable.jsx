@@ -3,11 +3,9 @@ import { connect } from 'react-redux';
 import propTypes from '../../utils/propTypes';
 import PropTypes from 'prop-types';
 import { SaveAlt } from '@material-ui/icons';
-import electronActionTypes from '../../electronActionTypes';
+import audioActions from '../../store/actions/audio';
 
 import Table from '../partial/Table/Table';
-
-const { ipcRenderer } = window.require('electron');
 
 const rows = [
   { id: 'artist', disablePadding: false, label: 'Artist' },
@@ -24,8 +22,7 @@ const audioTable = React.memo(props => (
     actions={[
       {
         icon: <SaveAlt />,
-        handler: (event, key) => ipcRenderer
-          .send(electronActionTypes.react.AUDIO_DOWNLOAD_SINGLE, key)
+        handler: (event, key) => props.fireDownload(key)
       }
     ]}
   />
@@ -33,12 +30,15 @@ const audioTable = React.memo(props => (
 
 audioTable.propTypes = {
   data: propTypes.AudioTable.data,
-  audioToggleSelect: PropTypes.func,
-  audioToggleSelectAll: PropTypes.func
+  fireDownload: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   data: state.audio.list
 });
 
-export default connect(mapStateToProps)(audioTable);
+const mapDispatchToProps = dispatch => ({
+  fireDownload: key => dispatch(audioActions.fireDownload(key))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(audioTable);

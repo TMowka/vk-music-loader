@@ -3,31 +3,58 @@ import electronActionTypes from '../../electronActionTypes';
 
 const { ipcRenderer } = window.require('electron');
 
-const _audioUploadList = audioList => ({
-  type: actionTypes.audio.UPLOAD_LIST,
-  payload: audioList
-});
+const _get = audioList => ({ type: actionTypes.audio.GET, payload: audioList });
 const _failure = error => ({ type: actionTypes.audio.FAILURE, payload: error });
 
-const fireAudioUploadList = () => dispatch => {
+const fireExport = () => dispatch => {
   try {
-    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_UPLOAD_LIST);
+    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_EXPORT);
   } catch (error) {
-    console.warn('[actions.audio] fireAudioUploadList');
+    console.warn('[actions.audio] fireExport');
     dispatch(_failure(error));
   }
 };
 
-const onAudioUploadList = audioList => dispatch => {
+const fireGet = () => dispatch => {
   try {
-    dispatch(_audioUploadList(audioList));
+    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_GET);
   } catch (error) {
-    console.warn('[actions.audio] onAudioUploadList');
+    console.warn('[actions.audio] fireGet');
+    dispatch(_failure(error));
+  }
+};
+
+const fireImport = () => dispatch => {
+  try {
+    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_IMPORT);
+  } catch (error) {
+    console.warn('[actions.audio] fireImport');
+    dispatch(_failure(error));
+  }
+};
+
+const onGet = audioList => dispatch => {
+  try {
+    dispatch(_get(audioList));
+  } catch (error) {
+    console.warn('[actions.audio] onGet');
+    dispatch(_failure(error));
+  }
+};
+
+const fireSynchronization = () => dispatch => {
+  try {
+    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_SYNCHRONIZATION);
+  } catch (error) {
+    console.warn('[actions.audio] fireAudioSynchronization');
     dispatch(_failure(error));
   }
 };
 
 export default {
-  fireAudioUploadList,
-  onAudioUploadList
+  fireExport,
+  fireImport,
+  fireGet,
+  onGet,
+  fireSynchronization
 };

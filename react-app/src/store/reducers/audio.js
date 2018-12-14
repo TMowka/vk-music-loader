@@ -1,15 +1,13 @@
 import actionTypes from '../types';
 
 const initialState = {
-  list: [
-    { key: '1', artist: 'test', name: 'test', duration: 10, progress: 0 }
-  ],
+  list: [],
   error: null
 };
 
 const audioReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.audio.UPLOAD_LIST: {
+    case actionTypes.audio.GET: {
       action.payload.forEach(el => {
         el.progress = 0;
 

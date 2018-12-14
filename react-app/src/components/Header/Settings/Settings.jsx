@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  IconButton, List, ListItem, ListItemText, Switch, ListItemSecondaryAction, ListSubheader
+  IconButton, List, ListItem, ListItemText, Switch, ListItemSecondaryAction, ListSubheader, Tooltip
 } from '@material-ui/core';
 import { Settings } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,9 +14,11 @@ import Dialog from '../../partial/Dialog/Dialog';
 const settings = React.memo(props => (
   <Dialog
     trigger={(
-      <IconButton color="inherit">
-        <Settings />
-      </IconButton>
+      <Tooltip title="Settings">
+        <IconButton color="inherit">
+          <Settings />
+        </IconButton>
+      </Tooltip>
     )}
     title="Settings"
   >

@@ -1,5 +1,5 @@
 const audioActionTypes = {
-  UPLOAD_LIST: 'AUDIO_UPLOAD_LIST',
+  GET: 'AUDIO_GET',
   FAILURE: 'AUDIO_FAILURE'
 };
 

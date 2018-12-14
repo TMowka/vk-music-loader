@@ -1,11 +1,11 @@
 const { BrowserWindow, ipcMain } = require('electron');
-const core = require('../../../core');
+const VkAudio = require('../../lib/vk-audio');
+const store = require('../../store');
 const fs = require('fs');
 const path = require('path');
-const JSONStream = require('JSONStream');
 
 let window;
-const createWindow = parent => {
+const createWindow = (parent, callback) => {
   window = new BrowserWindow({
     width: 400,
     height: 682,
@@ -33,6 +33,8 @@ const createWindow = parent => {
 
   window.on('close', () => {
     window.webContents.session.clearStorageData();
+    if (callback)
+      callback(window);
   });
 
   window.on('closed', () => {
@@ -46,16 +48,14 @@ ipcMain.on('audio-count-event', async (event, audioCount) => {
   window.webContents.session.cookies.get({ domain: '.vk.com' }, async (event, cookies) => {
     const userId = cookies.find(c => c.name === 'l').value;
     const cookieHeader = cookies.map(c => c.name + '=' + c.value).join('; ');
-    const getAudioListGen = core.getAudioListGen(userId, cookieHeader, audioCount);
+    const vkAudio = new VkAudio(userId);
 
-    const file = fs.createWriteStream('C:\\Users\\tgolovchak\\Documnts\\Git\\GitHub\\vk-music-loader\\electron-app\\data\\audio.json');
-    const jsonWriter = JSONStream.stringify();
-    jsonWriter.pipe(file);
+    let audioList = [];
+    const getAudioListGen = vkAudio.getAudioList(cookieHeader, audioCount);
     for (let audioBatch of getAudioListGen)
-      for (let audio of await audioBatch)
-        jsonWriter.write(audio);
+      audioList = audioList.concat(await audioBatch);
 
-    jsonWriter.end();
+    store.setAudioList(audioList);
     window.close();
   });
 });

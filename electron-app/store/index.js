@@ -7,6 +7,7 @@ class Store {
   constructor() {
     this.audioList = [];
 
+    this.getAudioList = this.getAudioList.bind(this);
     this.setAudioList = this.setAudioList.bind(this);
   }
 
@@ -18,6 +19,16 @@ class Store {
       duration: Number(audio.duration) || 0,
       url: audio.url
     };
+  }
+
+  // without keys
+  getAudioList() {
+    return this.audioList.map(audio => ({
+      artist: audio.artist,
+      name: audio.name,
+      duration: audio.duration,
+      url: audio.url
+    }));
   }
 
   setAudioList(audioList) {

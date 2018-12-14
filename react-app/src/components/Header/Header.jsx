@@ -5,7 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 
 import About from './About/About';
-import UploadAudio from './UploadAudio/UploadAudio';
+import ImportExport from './ImportExport/ImportExport';
+import Synchronization from './Synchronization/Synchronization';
 import Settings from './Settings/Settings';
 
 const header = React.memo(props => (
@@ -15,7 +16,8 @@ const header = React.memo(props => (
         <About />
         <div className={props.classes.grow} />
         <div className={props.classes.sectionDesktop}>
-          <UploadAudio />
+          <ImportExport />
+          <Synchronization />
           <Settings />
         </div>
       </Toolbar>

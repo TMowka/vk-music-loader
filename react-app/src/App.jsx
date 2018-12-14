@@ -10,7 +10,7 @@ import electronWorker from './electronWorker';
 class App extends PureComponent {
   componentDidMount() {
     electronWorker.registerEventsListeners();
-    this.props.fireGet();
+    this.props.fireGetSettings();
   }
 
   render() {
@@ -24,11 +24,11 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  fireGet: PropTypes.func.isRequired
+  fireGetSettings: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
-  fireGet: () => dispatch(settingsActions.fireGet())
+  fireGetSettings: () => dispatch(settingsActions.fireGet())
 });
 
 export default connect(null, mapDispatchToProps)(App);

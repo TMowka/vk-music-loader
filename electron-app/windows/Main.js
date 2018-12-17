@@ -19,8 +19,8 @@ const settings = new Settings({
 let window;
 const createWindow = () => {
   window = new BrowserWindow({
-    width: 1051,
-    height: 502
+    width: 1100,
+    height: 550
   });
   const loadURL = process.env.ENV === 'development'
     ? 'http://localhost:3000'
@@ -29,7 +29,9 @@ const createWindow = () => {
       protocol: 'file:',
       slashes: true
     });
-  window.setMenu(null);
+  if (process.env.ENV !== 'development')
+    window.setMenu(null);
+
   window.loadURL(loadURL);
 
   window.on('closed', () => {
@@ -81,15 +83,29 @@ ipcMain.on('RtoE-audio-export', async () => {
 
 ipcMain.on('RtoE-audio-download', async (event, key) => {
   const audio = store.audioList.find(audio => audio.key === key);
+  const fullName = audio.artist + ' - ' + audio.name;
   const savePath = dialog.showSaveDialog({
-    defaultPath: path.join(app.getPath('downloads'), `${audio.artist} - ${audio.name}.mp3`)
+    defaultPath: path.join(app.getPath('downloads'), fullName + '.mp3')
   });
   if (!savePath)
     return;
 
   const vkAudio = new VkAudio();
 
-  await vkAudio.download(audio.url, savePath);
+  window.webContents.send('EtoR-audio-download-start', fullName);
+  const res = await vkAudio.download(audio.url);
+  const dest = fs.createWriteStream(savePath);
+  const totalSize = res.headers.get('content-length');
+  let downloadedSize = 0;
+  res.body.on('data', chunk => {
+    downloadedSize += chunk.length;
+    const progress = Math.round((downloadedSize / totalSize + 0.00001) * 100);
+    window.webContents.send('EtoR-audio-download-progress', progress);
+  });
+  res.body.on('end', () => {
+    window.webContents.send('EtoR-audio-download-complete');
+  });
+  res.body.pipe(dest);
 });
 
 module.exports = {

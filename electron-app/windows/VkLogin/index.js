@@ -49,12 +49,7 @@ ipcMain.on('audio-count-event', async (event, audioCount) => {
     const userId = cookies.find(c => c.name === 'l').value;
     const cookieHeader = cookies.map(c => c.name + '=' + c.value).join('; ');
     const vkAudio = new VkAudio(userId);
-
-    let audioList = [];
-    const getAudioListGen = vkAudio.getList(cookieHeader, audioCount);
-    for (let audioBatch of getAudioListGen)
-      audioList = audioList.concat(await audioBatch);
-
+    const audioList = await vkAudio.getList(cookieHeader, audioCount);
     store.setAudioList(audioList);
     window.close();
   });

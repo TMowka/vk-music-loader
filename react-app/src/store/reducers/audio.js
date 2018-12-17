@@ -2,21 +2,37 @@ import actionTypes from '../types';
 
 const initialState = {
   list: [],
+  downloadProgress: -1,
   error: null
 };
 
 const audioReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.audio.GET: {
-      action.payload.forEach(el => {
-        el.progress = 0;
-
-        return el;
-      });
-
       return {
         ...state,
         list: action.payload
+      };
+    }
+
+    case actionTypes.audio.DOWNLOAD_START: {
+      return {
+        ...state,
+        downloadProgress: 0
+      };
+    }
+
+    case actionTypes.audio.DOWNLOAD_PROGRESS: {
+      return {
+        ...state,
+        downloadProgress: action.payload
+      };
+    }
+
+    case actionTypes.audio.DOWNLOAD_COMPLETE: {
+      return {
+        ...state,
+        downloadProgress: -1
       };
     }
 

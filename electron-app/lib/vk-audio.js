@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
 const vkAudioDecode = require('./vk-audio-decode');
-const fs = require('fs');
 
 class VkAudio {
   constructor(userId) {
@@ -10,9 +9,10 @@ class VkAudio {
     this.parse = this.parse.bind(this);
   }
 
-  * getList(cookieHeader, count) {
-    for (let i = 0; i < Math.ceil(count / 100); i++) {
-      yield fetch('https://m.vk.com/audios' + this.userId, {
+  async getList(cookieHeader, count) {
+    let audioList = [];
+    for (let i = 0; i < count; i += 100) {
+      const res = await fetch('https://m.vk.com/audios' + this.userId, {
         credentials: 'include',
         headers: {
           accept: '*/*',
@@ -21,23 +21,21 @@ class VkAudio {
           'x-requested-with': 'XMLHttpRequest',
           cookie: cookieHeader
         },
-        body: '_ajax=1&offset=' + i * 100,
+        body: '_ajax=1&offset=' + i,
         method: 'POST',
         mode: 'cors'
       })
-        .then(res => res.json())
-        .then(res => Object.values(res[3][0]).map(data => this.parse(data)));
+        .then(res => res.json());
+
+      const chunk = Object.values(res[3][0]).map(data => this.parse(data));
+      audioList = audioList.concat(chunk);
     }
+
+    return audioList;
   }
 
-  download(url, path) {
-    return fetch(url, {
-      method: 'GET'
-    })
-      .then(res => {
-        const dest = fs.createWriteStream(path);
-        res.body.pipe(dest);
-      });
+  download(url) {
+    return fetch(url, { method: 'GET' });
   }
 
   parse(data) {

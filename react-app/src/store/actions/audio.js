@@ -4,6 +4,12 @@ import electronActionTypes from '../../electronActionTypes';
 const { ipcRenderer } = window.require('electron');
 
 const _get = audioList => ({ type: actionTypes.audio.GET, payload: audioList });
+const _downloadStart = () => ({ type: actionTypes.audio.DOWNLOAD_START });
+const _downloadProgress = progress => ({
+  type: actionTypes.audio.DOWNLOAD_PROGRESS,
+  payload: progress
+});
+const _downloadComplete = () => ({ type: actionTypes.audio.DOWNLOAD_COMPLETE });
 const _failure = error => ({ type: actionTypes.audio.FAILURE, payload: error });
 
 const fireExport = () => dispatch => {
@@ -60,11 +66,41 @@ const fireDownload = key => dispatch => {
   }
 };
 
+const onDownloadStart = () => dispatch => {
+  try {
+    dispatch(_downloadStart());
+  } catch (error) {
+    console.warn('[actions.audio] onDownloadStart');
+    dispatch(_failure(error));
+  }
+};
+
+const onDownloadProgress = progress => dispatch => {
+  try {
+    dispatch(_downloadProgress(progress));
+  } catch (error) {
+    console.warn('[actions.audio] onDownloadProgress');
+    dispatch(_failure(error));
+  }
+};
+
+const onDownloadComplete = () => dispatch => {
+  try {
+    dispatch(_downloadComplete());
+  } catch (error) {
+    console.warn('[actions.audio] onDownloadComplete');
+    dispatch(_failure(error));
+  }
+};
+
 export default {
   fireExport,
   fireImport,
   fireGet,
   onGet,
   fireSynchronization,
-  fireDownload
+  fireDownload,
+  onDownloadStart,
+  onDownloadProgress,
+  onDownloadComplete
 };

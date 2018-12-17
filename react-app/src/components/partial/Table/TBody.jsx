@@ -24,7 +24,6 @@ const tBody = React.memo(props => {
             <TableCell>
               {`${minutes}:${seconds >= 0 && seconds < 10 ? '0' + seconds : seconds}`}
             </TableCell>
-            <TableCell>{el.progress}</TableCell>
             <TableCell>
               {props.actions.map((act, index) => (
                 <IconButton key={index} color="inherit" onClick={(e) => act.handler(e, el.key)}>

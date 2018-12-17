@@ -39,8 +39,9 @@ class D extends PureComponent {
           {this.props.trigger}
         </div>
         <Dialog
+          fullWidth={this.props.fullWidth}
           onClose={this.handleClose}
-          open={this.state.open}
+          open={this.props.open || this.state.open}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -64,7 +65,9 @@ D.propTypes = {
     PropTypes.string
   ]),
   title: PropTypes.string,
-  trigger: PropTypes.node.isRequired
+  trigger: PropTypes.node,
+  open: PropTypes.bool,
+  fullWidth: PropTypes.bool
 };
 
 export default withStyles(styles)(D);

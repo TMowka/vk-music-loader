@@ -11,8 +11,7 @@ export default {
       key: PropTypes.string.isRequired,
       artist: PropTypes.string,
       name: PropTypes.string,
-      duration: PropTypes.number,
-      progress: PropTypes.number
+      duration: PropTypes.number
     }))
   }
 };

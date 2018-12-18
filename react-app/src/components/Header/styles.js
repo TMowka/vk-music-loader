@@ -1,4 +1,4 @@
-export default theme => ({
+export default () => ({
   root: {
     width: '100%'
   },
@@ -6,9 +6,6 @@ export default theme => ({
     flexGrow: 1
   },
   sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex'
-    }
+    display: 'flex'
   }
 });

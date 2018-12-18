@@ -4,7 +4,7 @@ export default theme => ({
     marginTop: theme.spacing.unit * 3
   },
   table: {
-    minWidth: 1020
+    minWidth: 300
   },
   tableWrapper: {
     overflowX: 'auto'

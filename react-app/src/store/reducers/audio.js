@@ -1,6 +1,7 @@
 import actionTypes from '../types';
 
 const initialState = {
+  filter: '',
   list: [],
   downloadProgress: -1,
   error: null
@@ -33,6 +34,13 @@ const audioReducer = (state = initialState, action) => {
       return {
         ...state,
         downloadProgress: -1
+      };
+    }
+
+    case actionTypes.audio.FILTER_CHANGE: {
+      return {
+        ...state,
+        filter: action.payload
       };
     }
 

@@ -10,6 +10,8 @@ const _downloadProgress = progress => ({
   payload: progress
 });
 const _downloadComplete = () => ({ type: actionTypes.audio.DOWNLOAD_COMPLETE });
+const _filterChange = filter => ({ type: actionTypes.audio.FILTER_CHANGE, payload: filter });
+
 const _failure = error => ({ type: actionTypes.audio.FAILURE, payload: error });
 
 const fireExport = () => dispatch => {
@@ -17,15 +19,6 @@ const fireExport = () => dispatch => {
     ipcRenderer.send(electronActionTypes.RtoE.AUDIO_EXPORT);
   } catch (error) {
     console.warn('[actions.audio] fireExport');
-    dispatch(_failure(error));
-  }
-};
-
-const fireGet = () => dispatch => {
-  try {
-    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_GET);
-  } catch (error) {
-    console.warn('[actions.audio] fireGet');
     dispatch(_failure(error));
   }
 };
@@ -41,6 +34,7 @@ const fireImport = () => dispatch => {
 
 const onGet = audioList => dispatch => {
   try {
+    dispatch(_filterChange(''));
     dispatch(_get(audioList));
   } catch (error) {
     console.warn('[actions.audio] onGet');
@@ -93,14 +87,33 @@ const onDownloadComplete = () => dispatch => {
   }
 };
 
+const filterChange = filter => dispatch => {
+  try {
+    dispatch(_filterChange(filter));
+  } catch (error) {
+    console.warn('[actions.audio] filterChange');
+    dispatch(_failure(error));
+  }
+};
+
+const fireDownloadAll = () => dispatch => {
+  try {
+    ipcRenderer.send(electronActionTypes.RtoE.AUDIO_DOWNLOAD_ALL);
+  } catch (error) {
+    console.warn('[actions.audio] fireDownloadAll');
+    dispatch(_failure(error));
+  }
+};
+
 export default {
   fireExport,
   fireImport,
-  fireGet,
   onGet,
   fireSynchronization,
   fireDownload,
   onDownloadStart,
   onDownloadProgress,
-  onDownloadComplete
+  onDownloadComplete,
+  filterChange,
+  fireDownloadAll
 };

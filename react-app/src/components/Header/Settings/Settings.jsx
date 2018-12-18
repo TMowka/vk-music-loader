@@ -24,11 +24,11 @@ const settings = React.memo(props => (
   >
     <List subheader={<ListSubheader>Audio</ListSubheader>} className={props.classes.root}>
       <ListItem>
-        <ListItemText primary="Get audio list at startup" />
+        <ListItemText primary="Sync audio list at startup" />
         <ListItemSecondaryAction>
           <Switch
-            checked={props.data.getAudioListAtStartup}
-            onChange={event => props.fireSet('getAudioListAtStartup', event.target.checked)}
+            checked={props.data.syncAudioListAtStartup}
+            onChange={event => props.fireSet('syncAudioListAtStartup', event.target.checked)}
           />
         </ListItemSecondaryAction>
       </ListItem>
@@ -38,6 +38,8 @@ const settings = React.memo(props => (
 
 settings.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  fireSet: PropTypes.func.isRequired,
+  data: PropTypes.object // eslint-disable-line react/forbid-prop-types
 };
 
 const mapStateToProps = state => ({

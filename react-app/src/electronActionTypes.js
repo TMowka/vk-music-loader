@@ -15,6 +15,7 @@ export default {
     AUDIO_IMPORT: 'RtoE-audio-import',
     AUDIO_SYNCHRONIZATION: 'RtoE-audio-synchronization',
     AUDIO_DOWNLOAD: 'RtoE-audio-download',
+    AUDIO_DOWNLOAD_ALL: 'RtoE-audio-download-all',
 
     // settings
     SETTINGS_SET: 'RtoE-settings-set',

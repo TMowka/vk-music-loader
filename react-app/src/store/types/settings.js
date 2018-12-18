@@ -1,5 +1,6 @@
 const settingsActionTypes = {
   GET: 'SETTINGS_GET',
+
   FAILURE: 'SETTINGS_FAILURE'
 };
 

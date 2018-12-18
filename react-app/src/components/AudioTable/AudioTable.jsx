@@ -15,29 +15,39 @@ const rows = [
   { id: 'actions', disablePadding: false, label: 'Actions' }
 ];
 
-const audioTable = React.memo(props => (
-  <>
-    <Table
-      rows={rows}
-      data={props.data}
-      actions={[
-        {
-          icon: <SaveAlt />,
-          handler: (event, key) => props.fireDownload(key)
-        }
-      ]}
-    />
-    <DownloadProgress />
-  </>
-));
+const audioTable = React.memo(props => {
+  const data = props.data.filter(el => {
+    const elFullName = `${el.artist} - ${el.name}`;
+
+    return elFullName.toLowerCase().includes(props.filter.toLowerCase());
+  });
+
+  return (
+    <>
+      <Table
+        rows={rows}
+        data={data}
+        actions={[
+          {
+            icon: <SaveAlt />,
+            handler: (event, key) => props.fireDownload(key)
+          }
+        ]}
+      />
+      <DownloadProgress />
+    </>
+  );
+});
 
 audioTable.propTypes = {
   data: propTypes.AudioTable.data,
+  filter: PropTypes.string,
   fireDownload: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  data: state.audio.list
+  data: state.audio.list,
+  filter: state.audio.filter
 });
 
 const mapDispatchToProps = dispatch => ({

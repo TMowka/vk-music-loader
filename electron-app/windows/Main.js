@@ -74,7 +74,9 @@ ipcMain.on('RtoE-audio-import', async () => {
 });
 
 ipcMain.on('RtoE-audio-export', async () => {
-  const savePath = dialog.showSaveDialog();
+  const savePath = dialog.showSaveDialog({
+    defaultPath: path.join(app.getPath('documents'), 'audio.json')
+  });
   if (!savePath)
     return;
 
@@ -84,8 +86,9 @@ ipcMain.on('RtoE-audio-export', async () => {
 ipcMain.on('RtoE-audio-download', async (event, key) => {
   const audio = store.audioList.find(audio => audio.key === key);
   const fullName = audio.artist + ' - ' + audio.name;
+  const fileName = fullName.replace(/[/\\?%*:|"<>]/g, '_') + '.mp3';
   const savePath = dialog.showSaveDialog({
-    defaultPath: path.join(app.getPath('downloads'), fullName + '.mp3')
+    defaultPath: path.join(app.getPath('downloads'), fileName)
   });
   if (!savePath)
     return;
@@ -106,6 +109,15 @@ ipcMain.on('RtoE-audio-download', async (event, key) => {
     window.webContents.send('EtoR-audio-download-complete');
   });
   res.body.pipe(dest);
+});
+
+ipcMain.on('RtoE-audio-download-all', () => {
+  const savePath = dialog.showOpenDialog({
+    defaultPath: app.getPath('downloads'),
+    properties: ['openDirectory']
+  });
+  if (!savePath)
+    return;
 });
 
 module.exports = {

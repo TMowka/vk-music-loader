@@ -1,8 +1,6 @@
 import React from 'react';
 import { LinearProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
-import styles from './styles';
 
 import Dialog from '../../partial/Dialog/Dialog';
 
@@ -28,4 +26,4 @@ const mapStateToProps = state => ({
   progress: state.audio.downloadProgress
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(downloadProgress));
+export default connect(mapStateToProps)(downloadProgress);

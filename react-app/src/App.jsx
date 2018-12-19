@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import settingsActions from './store/actions/settings';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { store } from './index';
 
 import Header from './components/Header/Header';
 import AudioTable from './components/AudioTable/AudioTable';
@@ -9,7 +10,7 @@ import electronWorker from './electronWorker';
 
 class App extends PureComponent {
   componentDidMount() {
-    electronWorker.registerEventsListeners();
+    electronWorker.registerEventsListeners(store.dispatch);
     this.props.fireGetSettings();
   }
 

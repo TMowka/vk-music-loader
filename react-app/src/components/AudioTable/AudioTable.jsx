@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from '../../utils/propTypes';
 import PropTypes from 'prop-types';
-import { SaveAlt } from '@material-ui/icons';
-import audioActions from '../../store/actions/audio';
+import { SaveAlt, PlayCircleOutline } from '@material-ui/icons';
+import downloadActions from '../../store/actions/donwload';
+import playerActions from '../../store/actions/player';
 
 import Table from '../partial/Table/Table';
-import DownloadProgress from './DownloadProgress/DownloadProgress';
+import Download from './Download/Download';
+import Player from './Player/Player';
 
 const rows = [
   { id: 'artist', disablePadding: false, label: 'Artist' },
@@ -29,12 +31,17 @@ const audioTable = React.memo(props => {
         data={data}
         actions={[
           {
+            icon: <PlayCircleOutline />,
+            handler: (event, key) => props.play(key)
+          },
+          {
             icon: <SaveAlt />,
             handler: (event, key) => props.fireDownload(key)
           }
         ]}
       />
-      <DownloadProgress />
+      <Download />
+      <Player onClose={props.stop} />
     </>
   );
 });
@@ -42,7 +49,9 @@ const audioTable = React.memo(props => {
 audioTable.propTypes = {
   data: propTypes.AudioTable.data,
   filter: PropTypes.string,
-  fireDownload: PropTypes.func.isRequired
+  fireDownload: PropTypes.func.isRequired,
+  play: PropTypes.func.isRequired,
+  stop: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -51,7 +60,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fireDownload: key => dispatch(audioActions.fireDownload(key))
+  fireDownload: key => dispatch(downloadActions.fireDownload(key)),
+  play: key => dispatch(playerActions.play(key)),
+  stop: () => dispatch(playerActions.stop())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(audioTable);

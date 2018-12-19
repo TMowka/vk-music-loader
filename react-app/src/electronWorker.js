@@ -1,24 +1,26 @@
 import audioActions from './store/actions/audio';
+import downloadActions from './store/actions/donwload';
 import settingsActions from './store/actions/settings';
 import electronActionTypes from './electronActionTypes';
-import { store } from './index';
 
 const { ipcRenderer } = window.require('electron');
 
-const registerEventsListeners = () => {
+const registerEventsListeners = dispatch => {
   // audio
   ipcRenderer.on(electronActionTypes.EtoR.AUDIO_GET,
-    (event, audioList) => audioActions.onGet(audioList)(store.dispatch));
-  ipcRenderer.on(electronActionTypes.EtoR.AUDIO_DOWNLOAD_START,
-    () => audioActions.onDownloadStart()(store.dispatch));
-  ipcRenderer.on(electronActionTypes.EtoR.AUDIO_DOWNLOAD_PROGRESS,
-    (event, progress) => audioActions.onDownloadProgress(progress)(store.dispatch));
-  ipcRenderer.on(electronActionTypes.EtoR.AUDIO_DOWNLOAD_COMPLETE,
-    () => audioActions.onDownloadComplete()(store.dispatch));
+    (event, audioList) => audioActions.onGet(audioList)(dispatch));
+
+  // download
+  ipcRenderer.on(electronActionTypes.EtoR.DOWNLOAD_START,
+    (event, title) => downloadActions.onDownloadStart(title)(dispatch));
+  ipcRenderer.on(electronActionTypes.EtoR.DOWNLOAD_PROGRESS,
+    (event, data) => downloadActions.onDownloadProgress(data.title, data.progress)(dispatch));
+  ipcRenderer.on(electronActionTypes.EtoR.DOWNLOAD_COMPLETE,
+    () => downloadActions.onDownloadComplete()(dispatch));
 
   // settings
   ipcRenderer.on(electronActionTypes.EtoR.SETTINGS_GET,
-    (event, data) => settingsActions.onGet(data)(store.dispatch));
+    (event, data) => settingsActions.onGet(data)(dispatch));
 };
 
 export default {

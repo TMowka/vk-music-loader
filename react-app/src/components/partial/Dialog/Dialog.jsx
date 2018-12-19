@@ -40,7 +40,12 @@ class D extends PureComponent {
         </div>
         <Dialog
           fullWidth={this.props.fullWidth}
-          onClose={this.handleClose}
+          onClose={event => {
+            if (this.props.onClose)
+              this.props.onClose(event);
+
+            this.handleClose();
+          }}
           open={this.props.open || this.state.open}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -67,7 +72,8 @@ D.propTypes = {
   title: PropTypes.string,
   trigger: PropTypes.node,
   open: PropTypes.bool,
-  fullWidth: PropTypes.bool
+  fullWidth: PropTypes.bool,
+  onClose: PropTypes.func
 };
 
 export default withStyles(styles)(D);

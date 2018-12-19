@@ -2,9 +2,11 @@ export default {
   EtoR: {
     // audio
     AUDIO_GET: 'EtoR-audio-get',
-    AUDIO_DOWNLOAD_START: 'EtoR-audio-download-start',
-    AUDIO_DOWNLOAD_PROGRESS: 'EtoR-audio-download-progress',
-    AUDIO_DOWNLOAD_COMPLETE: 'EtoR-audio-download-complete',
+
+    // download
+    DOWNLOAD_START: 'EtoR-download-start',
+    DOWNLOAD_PROGRESS: 'EtoR-download-progress',
+    DOWNLOAD_COMPLETE: 'EtoR-download-complete',
 
     // settings
     SETTINGS_GET: 'EtoR-settings-get'
@@ -14,8 +16,10 @@ export default {
     AUDIO_EXPORT: 'RtoE-audio-export',
     AUDIO_IMPORT: 'RtoE-audio-import',
     AUDIO_SYNCHRONIZATION: 'RtoE-audio-synchronization',
-    AUDIO_DOWNLOAD: 'RtoE-audio-download',
-    AUDIO_DOWNLOAD_ALL: 'RtoE-audio-download-all',
+
+    // download
+    DOWNLOAD: 'RtoE-download',
+    DOWNLOAD_ALL: 'RtoE-download-all',
 
     // settings
     SETTINGS_SET: 'RtoE-settings-set',

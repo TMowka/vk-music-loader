@@ -1,11 +1,15 @@
 import { combineReducers } from 'redux';
 
 import audioReducer from './audio';
+import downloadReducer from './download';
 import settingsReducer from './settings';
+import playerReducer from './player';
 
 const rootReducer = combineReducers({
   audio: audioReducer,
-  settings: settingsReducer
+  download: downloadReducer,
+  settings: settingsReducer,
+  player: playerReducer
 });
 
 export default rootReducer;

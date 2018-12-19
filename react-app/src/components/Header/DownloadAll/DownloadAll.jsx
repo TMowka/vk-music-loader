@@ -2,7 +2,7 @@ import React from 'react';
 import { Tooltip, IconButton } from '@material-ui/core';
 import { SaveAlt } from '@material-ui/icons';
 import { connect } from 'react-redux';
-import audioActions from '../../../store/actions/audio';
+import downloadActions from '../../../store/actions/donwload';
 
 const downloadAll = React.memo(props => (
   <Tooltip title="Download all">
@@ -16,7 +16,7 @@ const downloadAll = React.memo(props => (
 ));
 
 const mapDispatchToProps = dispatch => ({
-  fireDownloadAll: () => dispatch(audioActions.fireDownloadAll())
+  fireDownloadAll: () => dispatch(downloadActions.fireDownloadAll())
 });
 
 export default connect(null, mapDispatchToProps)(downloadAll);

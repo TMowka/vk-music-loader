@@ -83,7 +83,7 @@ ipcMain.on('RtoE-audio-export', async () => {
   await fs.promises.writeFile(savePath, JSON.stringify(store.getAudioList()));
 });
 
-ipcMain.on('RtoE-audio-download', async (event, key) => {
+ipcMain.on('RtoE-download', async (event, key) => {
   const audio = store.audioList.find(audio => audio.key === key);
   const fullName = audio.artist + ' - ' + audio.name;
   const fileName = fullName.replace(/[/\\?%*:|"<>]/g, '_') + '.mp3';
@@ -95,7 +95,7 @@ ipcMain.on('RtoE-audio-download', async (event, key) => {
 
   const vkAudio = new VkAudio();
 
-  window.webContents.send('EtoR-audio-download-start', fullName);
+  window.webContents.send('EtoR-download-start', fullName);
   const res = await vkAudio.download(audio.url);
   const dest = fs.createWriteStream(savePath);
   const totalSize = res.headers.get('content-length');
@@ -103,21 +103,43 @@ ipcMain.on('RtoE-audio-download', async (event, key) => {
   res.body.on('data', chunk => {
     downloadedSize += chunk.length;
     const progress = Math.round((downloadedSize / totalSize + 0.00001) * 100);
-    window.webContents.send('EtoR-audio-download-progress', progress);
+    window.webContents.send('EtoR-download-progress', { title: progress + '%', progress });
   });
   res.body.on('end', () => {
-    window.webContents.send('EtoR-audio-download-complete');
+    window.webContents.send('EtoR-download-complete');
   });
   res.body.pipe(dest);
 });
 
-ipcMain.on('RtoE-audio-download-all', () => {
-  const savePath = dialog.showOpenDialog({
+ipcMain.on('RtoE-download-all', async () => {
+  const savePaths = dialog.showOpenDialog({
     defaultPath: app.getPath('downloads'),
     properties: ['openDirectory']
   });
-  if (!savePath)
+  if (!savePaths || savePaths.length !== 1)
     return;
+
+  const vkAudio = new VkAudio();
+
+  window.webContents.send('EtoR-download-start');
+  for (let [index, audio] of store.audioList.entries()) {
+    await new Promise(async resolve => {
+      const fullName = audio.artist + ' - ' + audio.name;
+      const fileName = fullName.replace(/[/\\?%*:|"<>]/g, '_') + '.mp3';
+      const res = await vkAudio.download(audio.url);
+      const dest = fs.createWriteStream(path.join(savePaths[0], fileName));
+      res.body.on('end', () => {
+        const progress = Math.round(((index + 1) / store.audioList.length + 0.00001) * 100);
+        window.webContents.send('EtoR-download-progress', {
+          title: `${index + 1}/${store.audioList.length}`,
+          progress
+        });
+        return resolve();
+      });
+      res.body.pipe(dest);
+    });
+  }
+  window.webContents.send('EtoR-download-complete');
 });
 
 module.exports = {
